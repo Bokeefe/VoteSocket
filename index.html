@@ -1,13 +1,28 @@
 
 <!DOCTYPE html>
 <html lang="en">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <head>
     <meta charset="UTF-8">
     <title>Whigs!</title>
     <style type="text/css">
+
+
     span {
         font-size: 42px;
     }
+    @media screen and (min-width: 800px) {
+        body {
+            margin: auto;
+            width: 50%;
+        }
+    }
+    @media screen and (max-width: 800px) {
+        canvas {
+        width:100%;
+        height:100%;
+        }
+    }   
 
     </style>
     <script
@@ -21,9 +36,9 @@
     <span id="nayG" style='color:red'>Nay</span>
     <span id="total"></span>
 </div>
-<button id = "Yea">Yea</button>
-<button id = "Nay">Nay</button>
-<canvas id="myCanvas" width=500 height=500 style="border:1px solid #d3d3d3;">
+<button id = "Yea" style='display:none'>Yea</button>
+<button id = "Nay" style='display:none'>Nay</button>
+<canvas id="myCanvas" width=500px; height=500px; style="border:1px solid #d3d3d3;">
 <script src="/socket.io/socket.io.js"></script>
 <script>
 /* jslint esversion:6 */
