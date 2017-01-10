@@ -13,3 +13,6 @@
     "socket.io": "^1.5.1"
   }
 }
+"scripts": {
+  "start": "node index.js"
+}
