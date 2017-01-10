@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Whigs!</title>
+    <style type="text/css">
+        html, body { width:100%; height:100%; }
+    </style>
+
+    <script
+  src="https://code.jquery.com/jquery-3.1.1.js"
+  integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
+  crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+<h1 id="total"></h1>
+<button id = "Yea">Yea</button>
+<button id = "Nay">Nay</button>
+<canvas id="canvas">
+    <p>Sorry, your browser does not support the canvas element. =(</p>
+</canvas>
+
+
+
+
+
+
+<script src="/socket.io/socket.io.js"></script>
+      <script src="/canvas.js"></script>
+<script>
+/* jslint esversion:6 */
+    var socket = io();
+    var total = 0;
+
+    socket.on('update-msg', function (msg) {
+        total = msg.data;
+       // console.log(total);
+        $('#total').html("People connected: " + msg.data);
+    });
+
+    var btn = document.getElementById("Yea");
+    btn.onclick = function(evt) {
+        socket.emit("button click");
+    };
+
+
+    socket.on('recv click', (yea) => {
+        btn.innerHTML = "Yea: " + yea;
+    });
+    
+    var btn2 = document.getElementById("Nay");
+    btn2.onclick = function(evt) {
+        socket.emit("button click2");
+    };
+
+    socket.on('recv click2', (nay) => {
+        btn2.innerHTML = "Nay: " + nay;
+    });
+    console.log(total);
+
+    // var totes = document.getElementById("total");
+
+    // socket.on('recv total', (connectCounter) => {
+    //     console.log("here");
+    //     document.getElementById("total").innerHTML("8");
+    // });
+
+
+
+
+
+
+</script>
+    
+</body>
+</html>
