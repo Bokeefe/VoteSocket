@@ -17,7 +17,7 @@ io.on('disconnect', function() { connectCounter--; });
 io.on('connection', (socket) => {
         io.sockets.emit('update-msg', { data: connectCounter});
         socket.on('disconnect', () => {
-            console.log("somebody disconnected" + connectCounter);
+            connectCounter--;
             io.sockets.emit('update-msg', { data: connectCounter});
 });
 

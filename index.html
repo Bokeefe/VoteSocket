@@ -5,40 +5,37 @@
     <meta charset="UTF-8">
     <title>Whigs!</title>
     <style type="text/css">
-        html, body { width:100%; height:100%; }
-    </style>
+    span {
+        font-size: 42px;
+    }
 
+    </style>
     <script
   src="https://code.jquery.com/jquery-3.1.1.js"
   integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
   crossorigin="anonymous"></script>
-
 </head>
 <body>
-
-<h1 id="total"></h1>
+<div class='container'>
+    <span id="yeaG" style='color:#05EFFF'>Yea</span>
+    <span id="nayG" style='color:red'>Nay</span>
+    <span id="total"></span>
+</div>
 <button id = "Yea">Yea</button>
 <button id = "Nay">Nay</button>
-<canvas id="canvas">
-    <p>Sorry, your browser does not support the canvas element. =(</p>
-</canvas>
-
-
-
-
-
-
+<canvas id="myCanvas" width=500 height=500 style="border:1px solid #d3d3d3;">
 <script src="/socket.io/socket.io.js"></script>
-      <script src="/canvas.js"></script>
 <script>
 /* jslint esversion:6 */
     var socket = io();
     var total = 0;
+    var yeaG = 0;
+    var nayG = 0;
 
     socket.on('update-msg', function (msg) {
         total = msg.data;
        // console.log(total);
-        $('#total').html("People connected: " + msg.data);
+        $('#total').html(" / " + msg.data + " people connected");
     });
 
     var btn = document.getElementById("Yea");
@@ -46,8 +43,9 @@
         socket.emit("button click");
     };
 
-
     socket.on('recv click', (yea) => {
+        yeaG = yea;
+        $('#yeaG').html(yea);
         btn.innerHTML = "Yea: " + yea;
     });
     
@@ -55,25 +53,58 @@
     btn2.onclick = function(evt) {
         socket.emit("button click2");
     };
-
+      
     socket.on('recv click2', (nay) => {
         btn2.innerHTML = "Nay: " + nay;
+        $('#nayG').html(nay);
     });
-    console.log(total);
 
-    // var totes = document.getElementById("total");
+var elem = document.getElementById('myCanvas'),
+    elemLeft = elem.offsetLeft,
+    elemTop = elem.offsetTop,
+    ctx = elem.getContext('2d'),
+    elements = [];
 
-    // socket.on('recv total', (connectCounter) => {
-    //     console.log("here");
-    //     document.getElementById("total").innerHTML("8");
-    // });
+var ctx = elem.getContext("2d");
+    ctx.font = "30px Arial";
+    ctx.fillText("Hello World",10,50);
 
+// Add event listener for `click` events.
+elem.addEventListener('click', function(event) {
+    var x = event.pageX - elemLeft,
+        y = event.pageY - elemTop;
+    console.log(x, y);
+    elements.forEach(function(element) {
+        // if (y > element.top && y < element.top + element.height && x > element.left && x < element.left + element.width) {
+        //     alert('clicked an element');
+        if(y<200){
+            socket.emit("button click");
+         } else {
+            socket.emit("button click2");
+         }
+    });
+}, false);
 
+// Add element.
+elements.push({
+    colour: '#05EFFF',
+    width: 500,
+    height: 250,
+    top: 0,
+    left: 0
+},{
+    colour: 'red',
+    width: 500,
+    height: 250,
+    top: 250,
+    left: 0
+});
 
-
-
-
+// Render elements.
+elements.forEach(function(element) {
+    ctx.fillStyle = element.colour;
+    ctx.fillRect(element.left, element.top, element.width, element.height);
+});
 </script>
-    
 </body>
 </html>
