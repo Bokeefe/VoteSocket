@@ -1,19 +1,47 @@
+// {
+//   "name": "socket",
+//   "version": "1.0.0",
+//   "description": "",
+//   "main": "app.js",
+//   "scripts": {
+//     "test": "echo \"Error: no test specified\" && exit 1"
+//   },
+//   "author": "",
+//   "license": "ISC",
+//   "dependencies": {
+//     "express": "^4.14.0",
+//     "socket.io": "^1.4.5"
+//   }
+//   ,
+//     "engines": {
+//     "node" : "^4.4.5"
+//   }
+
 {
-  "name": "socket",
-  "version": "1.0.0",
-  "description": "",
+  "name": "votesocker",
+  "version": "0.5",
+  "description": "a tool for 'yea or nay' voting among a group on a shared live server",
   "main": "app.js",
   "scripts": {
+    "start": "concurrently -p \"nodemon app.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bokeefe/votesocket"
+  },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bokeefe/votesocket/issues"
+  },
+  "homepage": "https://github.com/bokeefe/votesocket#readme",
   "dependencies": {
+    "body-parser": "^1.15.2",
+    "concurrently": "^3.1.0",
     "express": "^4.14.0",
+    "express-session": "^1.14.1",
+    "mongoose": "^4.6.4",
     "socket.io": "^1.4.5"
   }
-  ,
-    "engines": {
-    "node" : "^4.4.5"
-  }
-
+}
