@@ -1,7 +1,7 @@
 
 {
   "name": "votesocket",
-  "version": "0.5",
+  "version": "3.10.5",
   "description": "a tool for 'yea or nay' voting among a group on a shared live server",
   "main": "app.js",
   "scripts": {
@@ -27,3 +27,7 @@
     "socket.io": "^1.4.5"
   }
 }
+// ,  "engines": {
+//     "node": ">=6.5",
+//     "npm": ">=3.10"
+//   }
