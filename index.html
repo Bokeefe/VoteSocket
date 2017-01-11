@@ -92,7 +92,7 @@ elem.addEventListener('click', function(event) {
     elements.forEach(function(element) {
         // if (y > element.top && y < element.top + element.height && x > element.left && x < element.left + element.width) {
         //     alert('clicked an element');
-        if(y<200){
+        if(y<250){
             socket.emit("button click");
          } else {
             socket.emit("button click2");
