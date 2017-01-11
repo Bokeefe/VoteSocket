@@ -5,7 +5,7 @@
   "description": "a tool for 'yea or nay' voting among a group on a shared live server",
   "main": "app.js",
   "scripts": {
-    "start": "concurrently -p \"nodemon app.js\"",
+    "start": "\"nodemon app.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
