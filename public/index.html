@@ -99,8 +99,22 @@ elements.forEach(function(element) {
 
 });
 
+function checkYea (){
+  socket.on('recv click', (yea) => {
+      $('#yeaG').html(yea);
+  });
+}
+
+function checkNay (){
+  socket.on('recv click2', (nay) => {
+      $('#nayG').html(nay);
+  });
+}
+
 // elements[0].fillText("Yea",200,100);
 // // elements[0].ctx.font = "50px Helvetica";
+setInterval(socket.emit(checkYea()), 1000);
+setInterval(socket.emit(checkNay()), 1000);
 </script>
 </body>
 </html>

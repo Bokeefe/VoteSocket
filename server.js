@@ -7,7 +7,6 @@ var yea = 0;
 var nay = 0;
 var connectCounter = 0;
 
-
 app.use(express.static("./public"));
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/public/index.html");
@@ -28,10 +27,14 @@ io.on('connection', (socket) => {
 
 socket.on('button click', (message) => {
         yea += 1;
+        console.log(Math.floor(yea/connectCounter*100) + "% Yea");
+        console.log(Math.floor(nay/connectCounter*100) +"% Nay"+"====");
     io.emit('recv click', yea);
     });
     socket.on('button click2', (message) => {
         nay += 1;
+        console.log(Math.floor(nay/connectCounter*100) +"% Nay");
+        console.log(Math.floor(yea/connectCounter*100) + "% Yea"+"====");
     io.emit('recv click2', nay);
     });
         
