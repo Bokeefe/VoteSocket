@@ -5,26 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Whigs!</title>
-    <style type="text/css">
-
-
-    span {
-        font-size: 42px;
-    }
-    @media screen and (min-width: 800px) {
-        body {
-            margin: auto;
-            width: 50%;
-        }
-    }
-    @media screen and (max-width: 800px) {
-        canvas {
-        width:100%;
-        height:100%;
-        }
-    }   
-
-    </style>
+    <link rel="stylesheet" type="text/css" href="style.css">
+<!--     <script type="text/javascript" src="worker.js"></script> -->
     <script
   src="https://code.jquery.com/jquery-3.1.1.js"
   integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
@@ -42,10 +24,13 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
 /* jslint esversion:6 */
+
+
     var socket = io();
     var total = 0;
-    var yeaG = 0;
-    var nayG = 0;
+    var voted = false;
+    // var yeaG = 0;
+    // var nayG = 0;
 
     socket.on('update-msg', function (msg) {
         total = msg.data;
@@ -53,26 +38,6 @@
         $('#total').html(" / " + msg.data + " people connected");
     });
 
-    var btn = document.getElementById("Yea");
-    btn.onclick = function(evt) {
-        socket.emit("button click");
-    };
-
-    socket.on('recv click', (yea) => {
-        yeaG = yea;
-        $('#yeaG').html(yea);
-        btn.innerHTML = "Yea: " + yea;
-    });
-    
-    var btn2 = document.getElementById("Nay");
-    btn2.onclick = function(evt) {
-        socket.emit("button click2");
-    };
-      
-    socket.on('recv click2', (nay) => {
-        btn2.innerHTML = "Nay: " + nay;
-        $('#nayG').html(nay);
-    });
 
 var elem = document.getElementById('myCanvas'),
     elemLeft = elem.offsetLeft,
@@ -88,38 +53,54 @@ var ctx = elem.getContext("2d");
 elem.addEventListener('click', function(event) {
     var x = event.pageX - elemLeft,
         y = event.pageY - elemTop;
-    console.log(x, y);
     elements.forEach(function(element) {
         // if (y > element.top && y < element.top + element.height && x > element.left && x < element.left + element.width) {
         //     alert('clicked an element');
-        if(y<250){
-            socket.emit("button click");
-         } else {
-            socket.emit("button click2");
-         }
+        if (voted === false) {
+            if(y<250){
+                voted = true;
+                socket.emit("button click");
+                socket.on('recv click', (yea) => {
+                    $('#yeaG').html(yea);
+                });
+             } else {
+                socket.emit("button click2");
+                socket.on('recv click2', (nay) => {
+                    $('#nayG').html(nay);
+                });
+                voted = true;
+            }
+        }
     });
 }, false);
 
 // Add element.
 elements.push({
-    colour: '#05EFFF',
+    color: '#05EFFF',
     width: 500,
     height: 250,
     top: 0,
-    left: 0
+    left: 0,
+    name: "yea"
 },{
-    colour: 'red',
+
+    color: 'red',
     width: 500,
     height: 250,
     top: 250,
-    left: 0
+    left: 0,
+    name: "Nay"
 });
 
 // Render elements.
 elements.forEach(function(element) {
-    ctx.fillStyle = element.colour;
+    ctx.fillStyle = element.color;
     ctx.fillRect(element.left, element.top, element.width, element.height);
+
 });
+
+// elements[0].fillText("Yea",200,100);
+// // elements[0].ctx.font = "50px Helvetica";
 </script>
 </body>
 </html>

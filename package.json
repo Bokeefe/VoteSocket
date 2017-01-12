@@ -3,9 +3,9 @@
   "name": "votesocket",
   "version": "3.10.5",
   "description": "a tool for 'yea or nay' voting among a group on a shared live server",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
-    "start": "\"nodemon app.js\"",
+    "start": "\"nodemon server.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
