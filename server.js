@@ -41,6 +41,12 @@ socket.on('button click', (message) => {
 });
 io.emit('count', connectCounter);
 
+function update(){
+    io.emit('recv click', yea);
+    io.emit('recv click2', nay);
+}
+var timer = setInterval(update,10000);
+
 http.listen(3000, () => {
     console.log("Server started on port 3000");
 });
