@@ -11,6 +11,9 @@ var nayP = 0;
 var connectCounter = 0;
 
 app.use(express.static("./public"));
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/public/index.html");
 });

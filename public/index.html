@@ -37,71 +37,47 @@
     var yeaG = 0;
     var nayG = 0;
     var votes = [];
+//console.log("working?");
 
-
-
-
-  
-
-
-
-
-
-        $.get(
-          "/votepush",
-          function( res ) {
-            var votes = [];
-            votes.push(res);
-            //console.log(votes[0]);
-            var select = document.getElementById("selectVote");
-            for(var i = 0; i < votes.length; i++) {
-              //console.log(votes[i].name);
-                var opt = votes[i].name;
-                var el = document.createElement("option");
-                el.textContent = opt;
-                el.value = opt;
-                select.appendChild(el);
-            }
-            console.log(votes[0]);
-          
-
+$.get(
+  "/votepush",
+  function( res ) {
+    var votes = [];
+    var select = document.getElementById("selectVote");
+    for(var i = 0; i < res.length; i++) {
+      votes.push(res[i]);
+    }
+    for(i = 0; i < votes.length; i++) {
+      //console.log(votes[i].name);
+        var opt = votes[i].name;
+        var el = document.createElement("option");
+        el.textContent = opt;
+        el.value = opt;
+        select.appendChild(el);
+    }
 
 //push a new vote idea to array
   $("#namesub").click(function(){ //click listener to end break on break div
     var name = $("#votename").val();  
     var time = new Date($.now());
-    var raw = [{"name": name,"yeaP": 0,"nayP": 0,"time": time,"total": 1}];
-    //var newVote = JSON.stringify(raw[0]);
-    //var votes ;
-    //raw = JSON.stringify(raw[0]);
-    //JSON.stringify(votes);
-    votes.push(raw[0]);
-    JSON.stringify(votes);
-    console.log(votes);
-
-
-      $.post('/voteSend',
-        {votes:votes},
-          function(data,status){
-            //location.reload();
-            console.log(status);
-        });
+    var raw = {"name": name,"yeaP": 0,"nayP": 0,"time": time,"total": 1};
+    votes.push(raw);
+    votes = JSON.stringify(votes);
+  $.post('/voteSend',
+    {votes:votes},
+      function(data,status){
+        //location.reload();
+        console.log(status);
     });
+  });
 });
-    // var name = $("#votename").val(); 
-    // var yeaP = 0; 
-    // var nayP = 0; 
-    // var time = new Date($.now());
-    // var total = 1;
 
 
-
-
-    socket.on('update-msg', function (msg) {
-        total = msg.data;
-       // console.log(total);
-        $('#total').html(" / " + msg.data + " people connected");
-    });
+socket.on('update-msg', function (msg) {
+    total = msg.data;
+   // console.log(total);
+    $('#total').html(" / " + msg.data + " people connected");
+});
 
 
 var elem = document.getElementById('myCanvas'),

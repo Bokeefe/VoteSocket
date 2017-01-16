@@ -30,7 +30,6 @@ db.once('open', function callback () {
 
 
 app.use(express.static("./public"));
-
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
@@ -44,6 +43,8 @@ app.get('/votepush', (req, res) => {
 });
 
 app.post('/voteSend', (req, res) => { 
+    console.log(req.body.votes);
+    console.log(appendObject(req.body.votes));
     fs.writeFile('./example.json', req.body.votes, (err) => {
         console.log(req.body.votes);
         if (err) throw err;
@@ -52,39 +53,12 @@ app.post('/voteSend', (req, res) => {
 });
 
 function appendObject(obj){
-  var configFile = fs.readFileSync('./config.json');
+  var configFile = fs.readFileSync('./example.json');
   var config = JSON.parse(configFile);
   config.push(obj);
   var configJSON = JSON.stringify(config);
-  fs.writeFileSync('./config.json', configJSON);
+  fs.writeFileSync('./example.json', configJSON);
 }
-//app.post('/votepush', (req, res) => { //register new User
-  // User.find({name: req.body.name}, (err, data) => {
-  //     if (data.length === 0) {  
-  //       var newUser = new User({
-  //         name: req.body.name,
-  //         yeaP: 0,
-  //         nayP: 0,
-  //         time: req.body.time,
-  //         total: 1
-  //       });
-  //       newUser.save((err) => { // save the newUser object to the database
-  //         if (err) {
-  //           res.status(500);
-  //           console.error(err);
-  //           res.send({status: 'Error', message: 'unable to register User:' + err});
-  //         }
-  //         res.send({status: 'success', message: 'User added successfully'});
-  //       });
-  //     } else if (err) { // send back an error if there's a problem
-  //       res.status(500);
-  //       console.error(err);
-  //       res.send({status: 'Error', message: 'server error: ' + err});
-  //     } else {
-  //       res.send({status: 'Error', message: 'User already exists'}); // otherwise the user already exists
-  //     }
-  //   });
-//});
 
 io.on('connect', function() { connectCounter++; });
 io.on('disconnect', function() { connectCounter--; });
