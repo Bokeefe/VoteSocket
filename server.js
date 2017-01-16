@@ -1,9 +1,16 @@
 /* jslint esversion:6*/
+var fs = require("fs");
 var express = require('express');
+var session = require('express-session');
+var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
 var app = require("express")();
+var Schema = mongoose.Schema;
 var http = require("http").Server(app);
-// var http = require('http');
 var io = require("socket.io")(http);
+var User = require('./VoteSchema.js')(mongoose);
+var io = require("socket.io")(http);
+
 var yea = 0;
 var nay = 0;
 var yeaP = 0;
@@ -73,6 +80,10 @@ function update(){
     io.emit('recv percN', Math.floor(nay/connectCounter*100));
 }
 var timer = setInterval(update,1500);
+
+// http.listen(3000, () => { /////local host
+//     console.log("Server started on port 3000");
+// });
 
 
 

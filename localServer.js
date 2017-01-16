@@ -7,10 +7,9 @@ var bodyParser = require('body-parser');
 var app = require("express")();
 var Schema = mongoose.Schema;
 var http = require("http").Server(app);
-
-// var http = require('http');
 var io = require("socket.io")(http);
 var User = require('./VoteSchema.js')(mongoose);
+var io = require("socket.io")(http);
 
 
 var yea = 0;
