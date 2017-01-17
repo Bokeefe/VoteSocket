@@ -89,6 +89,9 @@ function update(){
 }
 var timer = setInterval(update,1500);
 
-http.listen(PORT, () => { /////local host
-    console.log("Server started on port " + PORT);
-});
+// http.listen(PORT, () => { /////local host
+//     console.log("Server started on port " + PORT);
+// });
+
+http.listen(3000, '104.131.1.90');
+console.log('Server running at http://104.131.1.90:3000');
