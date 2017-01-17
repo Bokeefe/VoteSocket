@@ -10,7 +10,7 @@ var http = require("http").Server(app);
 var io = require("socket.io")(http);
 var User = require('./VoteSchema.js')(mongoose);
 var io = require("socket.io")(http);
-
+var PORT = 3000;
 
 var yea = 0;
 var nay = 0;
@@ -42,8 +42,6 @@ app.get('/votepush', (req, res) => {
 });
 
 app.post('/voteSend', (req, res) => { 
-    console.log(req.body.votes);
-    console.log(appendObject(req.body.votes));
     fs.writeFile('./example.json', req.body.votes, (err) => {
         console.log(req.body.votes);
         if (err) throw err;
@@ -91,6 +89,6 @@ function update(){
 }
 var timer = setInterval(update,1500);
 
-http.listen(3000, () => { /////local host
-    console.log("Server started on port 3000");
+http.listen(PORT, () => { /////local host
+    console.log("Server started on port " + PORT);
 });

@@ -7,6 +7,7 @@
     <title>Whigs!</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 <!--     <script type="text/javascript" src="worker.js"></script> -->
+  <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
     <script
   src="https://code.jquery.com/jquery-3.1.1.js"
   integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
@@ -14,12 +15,15 @@
 </head>
 <body>
 <div class='container'>
-    <span id="yeaG" style='color:#DCC6E0'>Yea</span>
+    <span id="yeaG" style='color:#DCC6E0'></span>
+    <span style='color:#DCC6E0'>Yea</span>
     <span id="yeaP" style='color:#DCC6E0'>%</span>
-    <span id="nayG" style='color:purple'>Nay</span>
+    <span id="nayG" style='color:purple'></span>
+    <span  style='color:purple'>Nay</span>
     <span id="nayP" style='color:purple'>%</span><br>
     <span id="total" style='color:purple'></span><br>
-    <textarea id="votename" placeholder="new vote name"></textarea>
+    <!-- <textarea id="votename" class="commentarea" placeholder="new vote name"></textarea> -->
+    <input id="votename" type="text" class="commentarea" placeholder="new vote" >
     <button id="namesub">Create</button><br>
     <form id="myForm">
       <select id="selectVote">
@@ -37,7 +41,8 @@
     var yeaG = 0;
     var nayG = 0;
     var votes = [];
-//console.log("working?");
+
+
 
 $.get(
   "/votepush",
@@ -62,8 +67,11 @@ $.get(
     }
 
 //push a new vote idea to array
-  $("#namesub").click(function(){ //click listener to end break on break div
-    var name = $("#votename").val();  
+  $("#namesub").click(
+    function (){ //click listener to end break on break div
+    var name = $("#votename").val(); 
+    $("#votename").val(name); 
+    console.log(name);
     var time = new Date($.now());
     time = time.valueOf();
     console.log(time);
@@ -75,6 +83,31 @@ $.get(
       function(data,status){
         //location.reload();
         console.log(status);
+        //$("myForm")[0].reset();
+    });
+
+  });
+  $(document).ready(function() {
+    $('#votename').keydown(function(event) {
+        if (event.keyCode == 13) {
+            var name = $("#votename").val(); 
+    $("#votename").val(name); 
+    console.log(name);
+    var time = new Date($.now());
+    time = time.valueOf();
+    console.log(time);
+    var raw = {"name": name,"yeaP": 0,"nayP": 0,"time": time,"total": 1};
+    votes.push(raw);
+    votes = JSON.stringify(votes);
+  $.post('/voteSend',
+    {votes:votes},
+      function(data,status){
+        //location.reload();
+        console.log(status);
+        //$("myForm")[0].reset();
+    });
+            return false;
+         }
     });
   });
 });
