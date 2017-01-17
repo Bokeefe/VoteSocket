@@ -23,16 +23,22 @@
     <span id="nayP" style='color:purple'>%</span><br>
     <span id="total" style='color:purple'></span><br>
     <!-- <textarea id="votename" class="commentarea" placeholder="new vote name"></textarea> -->
-    <input id="votename" type="text" class="commentarea" placeholder="new vote" >
-    <button id="namesub">Create</button><br>
+
+<!--     <button id="namesub">Create</button><br>
     <form id="myForm">
       <select id="selectVote">
         <option>Currents Votes</option>
       </select>
-    </form>
+    </form> -->
 </div>
-<canvas id="myCanvas" width=500px; height=500px; style="border:5px solid white;">
-<script src="/socket.io/socket.io.js"></script>
+<div id='plink'>
+  <canvas id="myCanvas" width=500px; height=500px;>
+  </canvas>
+</div>
+<div>
+  <input id="votename" type="text" class="commentarea" placeholder="name this vote and save >>" >
+</div>
+  <script src="/socket.io/socket.io.js"></script>
 <script>
 /* jslint esversion:6 */
     var socket = io();
