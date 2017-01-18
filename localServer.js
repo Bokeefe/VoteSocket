@@ -42,20 +42,32 @@ app.get('/votepush', (req, res) => {
 });
 
 app.post('/voteSend', (req, res) => { 
-    fs.writeFile('./example.json', req.body.votes, (err) => {
-        console.log(req.body.votes);
+    var hold = req.body.votes;
+    hold = JSON.parse(hold);
+    var last = 0;
+    for(var i in hold){
+        last = hold.length;
+    }
+    var store = {"Name": hold[last-1].name,"Time":hold[last-1].time,"Yea":  yeaP, "Nay": nayP, "total": connectCounter};
+    console.log(res);
+    console.log(hold);
+    console.log(store);
+    //hold.push(store);
+
+    hold = JSON.stringify(hold);
+    fs.writeFile('./example.json', res, (err) => {
         if (err) throw err;
             res.send("add Vote");
     });
 });
 
-function appendObject(obj){
-  var configFile = fs.readFileSync('./example.json');
-  var config = JSON.parse(configFile);
-  config.push(obj);
-  var configJSON = JSON.stringify(config);
-  fs.writeFileSync('./example.json', configJSON);
-}
+// function appendObject(obj){
+//   var configFile = fs.readFileSync('./example.json');
+//   var config = JSON.parse(configFile);
+//   config.push(obj);
+//   var configJSON = JSON.stringify(config);
+//   fs.writeFileSync('./example.json', configJSON);
+// }
 
 io.on('connect', function() { connectCounter++; });
 io.on('disconnect', function() { connectCounter--; });
@@ -89,9 +101,9 @@ function update(){
 }
 var timer = setInterval(update,1500);
 
-// http.listen(PORT, () => { /////local host
-//     console.log("Server started on port " + PORT);
-// });
+http.listen(PORT, () => { /////local host
+    console.log("Server started on port " + PORT);
+});
 
-http.listen(3000, '104.131.1.90');
-console.log('Server running at http://104.131.1.90:3000');
+// http.listen(3000, '104.131.1.90');
+// console.log('Server running at http://104.131.1.90:3000');
