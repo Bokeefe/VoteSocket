@@ -58,18 +58,19 @@ $.get(
   "/votepush",
   function( res ) {
     var votes = [];
-    votes = res;
     var select = document.getElementById("selectVote");
     var timeStamp = new Date($.now());
     timeStamp = timeStamp.valueOf();
+
     function twentyFour (res){
       for(var i = 0; i < res.length; i++) {//votes need to be less than 24 hours
-        if((timeStamp - res[i].time)<86400000){
+        if((timeStamp - res[i].Time)<86400000){
           votes.push(res[i]);
         }
       }
     }
-    votes = JSON.stringify(twentyFour(res));
+    twentyFour(res);
+    votes = JSON.stringify(votes);
     $('#display').html(votes);
     $('#votename').keydown(function(event) {
         if (event.keyCode == 13) {
@@ -79,9 +80,9 @@ $.get(
             var time = new Date($.now());
             time = time.valueOf();
             var raw = {"name": name,"time": time};
+            //console.log(typeof raw);
             votes.push(raw);
             votes = JSON.stringify(votes);
-
   $.post('/voteSend',
     {votes:votes},
       function(data,status){

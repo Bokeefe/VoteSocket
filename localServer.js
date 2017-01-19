@@ -42,23 +42,27 @@ app.get('/votepush', (req, res) => {
 });
 
 app.post('/voteSend', (req, res) => { 
-    var hold = req.body.votes;
-    hold = JSON.parse(hold);
+    var store = [];
     var last = 0;
+    var hold = req.body.votes;
+    
+    hold = JSON.parse(hold);
     for(var i in hold){
         last = hold.length;
     }
-    var store = {"Name": hold[last-1].name,"Time":hold[last-1].time,"Yea":  yeaP, "Nay": nayP, "total": connectCounter};
-    console.log(res);
-    console.log(hold);
-    console.log(store);
-    //hold.push(store);
-
+    for(i in hold){
+        store.push(hold[i]);
+    }
+    store = {"Name": hold[last-1].name,"Time":hold[last-1].time,"Yea":  yeaP, "Nay": nayP, "total": connectCounter};
+    var lastPoint = hold.pop(hold[last]);
+    var lastPoint2 = {"Name": lastPoint.name,"Time":lastPoint.time,"Yea":  yeaP, "Nay": nayP, "total": connectCounter};
+    hold  = hold.concat(lastPoint2);//////////dont erase until you get WTF
     hold = JSON.stringify(hold);
-    fs.writeFile('./example.json', res, (err) => {
-        if (err) throw err;
-            res.send("add Vote");
-    });
+    console.log(hold);
+    // fs.writeFile('./example.json', hold, (err) => {
+    //     if (err) throw err;
+    //         res.send("add Vote");
+    // });
 });
 
 // function appendObject(obj){
