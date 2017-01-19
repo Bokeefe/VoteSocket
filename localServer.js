@@ -59,10 +59,10 @@ app.post('/voteSend', (req, res) => {
     hold  = hold.concat(lastPoint2);//////////dont erase until you get WTF
     hold = JSON.stringify(hold);
     console.log(hold);
-    // fs.writeFile('./example.json', hold, (err) => {
-    //     if (err) throw err;
-    //         res.send("add Vote");
-    // });
+    fs.writeFile('./example.json', hold, (err) => {
+        if (err) throw err;
+            res.send("add Vote");
+    });
 });
 
 // function appendObject(obj){

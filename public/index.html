@@ -70,8 +70,8 @@ $.get(
       }
     }
     twentyFour(res);
-    votes = JSON.stringify(votes);
-    $('#display').html(votes);
+    var display = JSON.stringify(votes);
+    $('#display').html(display);
     $('#votename').keydown(function(event) {
         if (event.keyCode == 13) {
             var name = $("#votename").val(); 
@@ -83,6 +83,7 @@ $.get(
             //console.log(typeof raw);
             votes.push(raw);
             votes = JSON.stringify(votes);
+            console.log(votes);
   $.post('/voteSend',
     {votes:votes},
       function(data,status){
