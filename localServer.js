@@ -58,7 +58,7 @@ app.post('/voteSend', (req, res) => {
     var lastPoint2 = {"Name": lastPoint.name,"Time":lastPoint.time,"Yea":  yeaP, "Nay": nayP, "total": connectCounter};
     hold  = hold.concat(lastPoint2);//////////dont erase until you get WTF
     hold = JSON.stringify(hold);
-    console.log(hold);
+    //console.log(hold);
     fs.writeFile('./example.json', hold, (err) => {
         if (err) throw err;
             res.send("add Vote");

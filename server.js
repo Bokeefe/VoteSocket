@@ -32,10 +32,10 @@ app.get('/votepush', (req, res) => {
 });
 
 app.post('/voteSend', (req, res) => { 
-    console.log(req.body.votes);
-    console.log(appendObject(req.body.votes));
+  //  console.log(req.body.votes);
+   // console.log(appendObject(req.body.votes));
     fs.writeFile('./example.json', req.body.votes, (err) => {
-        console.log(req.body.votes);
+        //console.log(req.body.votes);
         if (err) throw err;
             res.send("add Vote");
     });

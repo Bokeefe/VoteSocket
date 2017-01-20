@@ -1,9 +1,9 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Show of Hands</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 <!--     <script type="text/javascript" src="worker.js"></script> -->
@@ -38,7 +38,8 @@
     <input id="votename" type="text" class="commentarea" placeholder="name this vote and save >>" onsubmit="reset()" >
   </div>
   <div id="display">
-    
+  </div>
+  <div id="experiment">
   </div>
 </div>
 
@@ -52,8 +53,6 @@
     // var nayG = 0;
     // var votes = [];
 
-
-
 $.get(
   "/votepush",
   function( res ) {
@@ -64,12 +63,24 @@ $.get(
 
     function twentyFour (res){
       for(var i = 0; i < res.length; i++) {//votes need to be less than 24 hours
-        if((timeStamp - res[i].Time)<86400000){
+        if((timeStamp - res[i].Time)<604800000){
           votes.push(res[i]);
         }
       }
     }
     twentyFour(res);
+
+
+          //return votes[i].Name +" = " + " Yea: " + votes[i].Yea + " Nay: " + votes[i].Nay + " Voters " + votes[i].total;
+    //     function present(votes){
+    //     for(var i = 0; i< votes.length; i++){
+    //       return(votes[i].Name +" = " + " Yea: " + votes[i].Yea + " Nay: " + votes[i].Nay + " Voters " + votes[i].total);
+    //     }
+    //   }
+
+    // console.log(present(votes));
+    //$('#experiment').html(votes);
+
     var display = JSON.stringify(votes);
     $('#display').html(display);
     $('#votename').keydown(function(event) {
@@ -83,7 +94,7 @@ $.get(
             //console.log(typeof raw);
             votes.push(raw);
             votes = JSON.stringify(votes);
-            console.log(votes);
+            
   $.post('/voteSend',
     {votes:votes},
       function(data,status){
