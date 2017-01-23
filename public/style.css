@@ -7,7 +7,7 @@
         font-family: 'Quicksand', sans-serif;
     }
     .container {
-        width: 500px;
+        width: 700px;
     }
     input{
         text-align: center;
@@ -17,7 +17,10 @@
         height: 30px;
         width: 82%;
         border-radius: 10px;
-
+    }
+    #warning{
+        color:red;
+        display: none;
     }
     body > div > span:nth-child(3) {
         margin-left: 30px;
@@ -32,6 +35,18 @@
         border-radius: 25px;
         box-shadow: 20px 20px 50px grey;
 
+    }
+    #experiment{
+        line-height: 0px;
+    }
+    #title {
+        font-size: 28px;
+        font-family: 'Quicksand', sans-serif;
+    }
+    #stat {
+        margin-left: 30px;
+        font-size: 18px;
+        font-family: 'Quicksand', sans-serif; 
     }
 @media screen and (min-width: 800px) {
         body {
@@ -66,6 +81,16 @@
         margin:10px;
         height: 30px;
         width: 90%;
-        border-radius: 10px;
+        border-radius: 12px;
+    }
+    #experiment{
+        line-height: 0px;
+    }
+    #stat{
+        line-height: 12px;
+    }
+    #title {
+        font-size: 20px;
+        line-height: 15px;
     }
 }   
