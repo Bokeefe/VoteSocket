@@ -23,7 +23,7 @@
     <span id="nayP" style='color:purple'>%</span><br>
     <span id="total" style='color:purple'></span><br>
     <div id='plink'>
-      <canvas id="myCanvas" width=600px; height=600px;>
+      <canvas id="myCanvas" width=320px; height=320px;>
       </canvas>
     </div>
     <span id="warning">TOO LONG OF A TITLE!!!!</span>
@@ -81,9 +81,8 @@ $.get(
               // $('#warning').css("display:show");
               alert("That name is too long!");
             } else {
-              console.log(name.length);
               var raw = {"name": name,"time": time};
-              console.log(votes);
+              votes.reverse();
               votes.push(raw);
               votes = JSON.stringify(votes);
             }
@@ -124,13 +123,15 @@ elem.addEventListener('click', function(event) {
         y = event.pageY - elemTop;
     elements.forEach(function(element) {
         if (voted === false) {
-            if(y<300){
+            if(y<160){
                 voted = true;
+                console.log(y);
                 socket.emit("button click");
                 socket.on('recv click', (yea) => {
                     $('#yeaG').html(yea);
                 });
              } else {
+                console.log(y);
                 socket.emit("button click2");
                 socket.on('recv click2', (nay) => {
                     $('#nayG').html(nay);
@@ -144,17 +145,17 @@ elem.addEventListener('click', function(event) {
 // Add element.
 elements.push({
     color: '#DCC6E0',
-    width: 600,
-    height: 300,
+    width: 320,
+    height: 160,
     top: 0,
     left: 0,
     name: "yea"
 },{
 
     color: 'purple',
-    width: 600,
-    height: 300,
-    top: 300,
+    width: 320,
+    height: 160,
+    top: 160,
     left: 0,
     name: "Nay"
 });
