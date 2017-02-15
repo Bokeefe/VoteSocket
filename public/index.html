@@ -66,8 +66,7 @@ $.get(
         $('#experiment').html(voteDisplay);
       }
     }
-    twentyFour(exp);//this might work later if jQuery isn't working now.
-
+    twentyFour(exp);
 
     var display = JSON.stringify(votes);
     $('#votename').keydown(function(event) {
@@ -124,12 +123,12 @@ elem.addEventListener('click', function(event) {
     elements.forEach(function(element) {
         if (voted === false) {
             if(y<160){
-                voted = true;
                 console.log(y);
                 socket.emit("button click");
                 socket.on('recv click', (yea) => {
                     $('#yeaG').html(yea);
                 });
+                voted = true;
              } else {
                 console.log(y);
                 socket.emit("button click2");

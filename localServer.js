@@ -63,18 +63,18 @@ app.post('/voteSend', (req, res) => {
         if (err) throw err;
             res.send("add Vote");
     });
+    server.close();
 });
 
-// function appendObject(obj){
-//   var configFile = fs.readFileSync('./example.json');
-//   var config = JSON.parse(configFile);
-//   config.push(obj);
-//   var configJSON = JSON.stringify(config);
-//   fs.writeFileSync('./example.json', configJSON);
-// }
-
 io.on('connect', function() { connectCounter++; });
-io.on('disconnect', function() { connectCounter--; });
+io.on('disconnect', function() { 
+    connectCounter--;
+    yea = 0;
+    nay = 0;
+    yeaP = 0;
+    nayP = 0;
+    console.log("blamm");
+     });
 
 io.on('connection', (socket) => {
         io.sockets.emit('update-msg', { data: connectCounter});
