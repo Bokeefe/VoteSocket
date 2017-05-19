@@ -6,11 +6,12 @@ var bodyParser = require('body-parser');
 var app = require("express")();
 var http = require("http").Server(app);
 var io = require("socket.io")(http);
+
 var PORT = 3000;
 
 
 var allVotes = [];
-var voteID = 0;
+
 var currentVotes = [];
 app.use(express.static("./public"));
 app.use(bodyParser.urlencoded({extended: false}));
@@ -19,9 +20,6 @@ app.use(bodyParser.json());
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/public/index.html");
 });
-
-
-
 
 app.post('/newVote', (req, res) => {
     var newVote = JSON.parse(req.body.voteName);
@@ -37,19 +35,9 @@ app.post('/newVote', (req, res) => {
 app.get("/getSession", (req, res) => {
     res.send(session.allVotes);
 });
-
-var voteID = 0;
-
-app.post("/votePick", (req, res) => {
-        voteID = req.body.votePick;
-        res.send(req.body.votePick);
-        var nsp = io.of('/'+voteID);
-
-     app.get("/"+voteID, (req, res) => {
-        res.sendFile(__dirname + "/public/canvas.html");
-    });
-
-
+app.get("/getVotes", (req, res) => {
+    res.send(session.currentVotes);
+});
 
     app.get('/votepush', (req, res) => {
      res.sendFile(__dirname + '/example.json');
@@ -80,50 +68,40 @@ app.post("/votePick", (req, res) => {
     });
 
 
-
-//////////////SOCKET STUFF///////
-    nsp.on('connection', function(socket){
-    currentVotes[voteID].connectCounter++;
-    nsp.emit('update-msg',currentVotes[voteID]);
-      console.log('a user connected to '+voteID+" count "+ JSON.stringify(currentVotes[voteID]));
-        nsp.emit('update-msg',currentVotes[voteID]);
-        socket.on('button yea', function (data) {
-            console.log(data+" data");
-            currentVotes[voteID].yea++;
-            console.log(currentVotes[voteID]);
-            io.emit('update-msg',currentVotes[voteID]);
-            update(currentVotes[voteID]);
+    app.post("/votePick", (req, res) => {
+            voteID = req.body.votePick;
+            res.send(req.body.votePick);
+            var nsp = io.of('/'+voteID);
+        app.get("/"+voteID, (req, res) => {
+            res.sendFile(__dirname + "/public/canvas.html");
         });
-        socket.on('button nay', function (data) {
-            currentVotes[voteID].nay++;
+
+//////////////MONTYS SOCKET STUFF///////
+    nsp.on("connection", socket => {
+        currentVotes[voteID].connectCounter++;
+        console.log("connection "+currentVotes[voteID].connectCounter);
+
+        socket.on("vote", (data) => {
             console.log(data);
-            console.log(currentVotes[voteID]);
-          io.emit('update-msg',currentVotes[voteID]);
-              update(currentVotes[voteID]);
+            if(data!="yea"){
+                currentVotes[voteID].nay++;
+                console.log(currentVotes[voteID]);
+                socket.emit('update'+voteID,currentVotes[voteID]);
+            } else {
+                currentVotes[voteID].yea++;
+                console.log(currentVotes[voteID]);
+                socket.emit('update'+voteID,currentVotes[voteID]);
+            }
         });
-
-
-
-
-        socket.on('disconnect', function(){
-        nsp.emit('update-msg',currentVotes[voteID]);
-            // currentVotes[voteID].connectCounter--;
-            // console.log('user disconnected from '+currentVotes[voteID].connectCounter);
-
-        });
-
-
-
     });
+
 /////////END SOCKET///////////
-
-
-function update(data){
-    nsp.emit('update-msg',data);
-}
-
-
 });
+
+
+
+
+
 
 
 

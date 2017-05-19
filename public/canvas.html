@@ -28,167 +28,157 @@
       <canvas id="myCanvas" width=320px; height=320px;>
       </canvas>
     </div><br>
-   	<button style="height:49px; border:1px solid black; border-radius: 10px; background-color: rgba(0,0,0,0); width:100%;">End the Vote</button>
+   	<button style="height:49px; border:1px solid black; border-radius: 10px; background-color: rgba(0,0,0,.5); width:100%;">End the Vote</button>
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
 <script>
 /* jslint esversion:6 */
-  var socket = io.connect('http://localhost');
 $( document ).ready(function(){
+
+
+
+
+//////////////// INDEX.html /////////////
+    $.get(
+      "/votepush",
+      function( res ) {
+        var votes = [];
+        var quill ;
+        var voteDisplay = [];
+        var select = document.getElementById("selectVote");
+        var timeStamp = new Date($.now());
+        timeStamp = timeStamp.valueOf();
+
+        var exp = res
+        exp.reverse();
+        function twentyFour (exp){
+          for(var i in exp) { //need to reverse loop chrono
+            if((timeStamp - exp[i].Time)<604800000){//votes need to be less than a week old (milliseconds)
+              votes.push(exp[i]);
+              var print = "<p id='title';>"+votes[i].Name+" : </p><br><p id='stat'>"+votes[i].Yea+"% Yea | "+votes[i].Nay+"% Nay | "+ votes[i].total+ " people voted"+ "</p><br>";
+              voteDisplay = voteDisplay.concat(print);
+            }
+            $('#experiment').html(voteDisplay);
+          }
+        }
+        twentyFour(exp);
+
+        var display = JSON.stringify(votes);
+        $('#votename').keydown(function(event) {
+            if (event.keyCode == 13) {
+                var name = $("#votename").val();
+                $("#votename").val(name);
+                $("#votename").val("");
+                var time = new Date($.now());
+                time = time.valueOf();
+                if(name.length > 60){
+                  // $('#warning').css("display:show");
+                  alert("That name is too long!");
+                } else {
+                  var raw = {"name": name,"time": time};
+                  votes.reverse();
+                  votes.push(raw);
+                  votes = JSON.stringify(votes);
+                }
+      $.post('/voteSend',
+        {votes:votes},
+          function(data,status){
+            //location.reload();
+            console.log(status);
+            //$("myForm")[0].reset();
+      });
+          return false;
+        }
+      });
+    });
+/////////////end INDEX.html///////
+
+
+/////////////CANVAS.html///////////
+var voted = false;
+$.get( "/getVotes",  function( data ) {
+    var voteID = window.location.pathname;
+    voteID = voteID.replace(["/"],"");
     $.get( "/getSession",  function( data ) {
-      var voteID = window.location.pathname;
-      voteID = voteID.replace(["/"],"");
-      $('#voteName').html(data[voteID]);
-        console.log("voteId "+voteID);
-
-
-
-    var voted = false;
-    console.log(voteID);
-    var socket = io('/'+voteID);
-    console.log(socket);
-
-
-
-
-    $('button').click(function(){
-    	console.log("fart");
+        $('#voteName').html(data[voteID]);
     });
 
-
-
-$.get(
-  "/votepush",
-  function( res ) {
-    var votes = [];
-    var quill ;
-    var voteDisplay = [];
-    var select = document.getElementById("selectVote");
-    var timeStamp = new Date($.now());
-    timeStamp = timeStamp.valueOf();
-
-    var exp = res
-    exp.reverse();
-    function twentyFour (exp){
-      for(var i in exp) { //need to reverse loop chrono
-        if((timeStamp - exp[i].Time)<604800000){//votes need to be less than a week old (milliseconds)
-          votes.push(exp[i]);
-          var print = "<p id='title';>"+votes[i].Name+" : </p><br><p id='stat'>"+votes[i].Yea+"% Yea | "+votes[i].Nay+"% Nay | "+ votes[i].total+ " people voted"+ "</p><br>";
-          voteDisplay = voteDisplay.concat(print);
-        }
-        $('#experiment').html(voteDisplay);
-      }
-    }
-    twentyFour(exp);
-
-    var display = JSON.stringify(votes);
-    $('#votename').keydown(function(event) {
-        if (event.keyCode == 13) {
-            var name = $("#votename").val();
-            $("#votename").val(name);
-            $("#votename").val("");
-            var time = new Date($.now());
-            time = time.valueOf();
-            if(name.length > 60){
-              // $('#warning').css("display:show");
-              alert("That name is too long!");
-            } else {
-              var raw = {"name": name,"time": time};
-              votes.reverse();
-              votes.push(raw);
-              votes = JSON.stringify(votes);
-            }
-  $.post('/voteSend',
-    {votes:votes},
-      function(data,status){
-        //location.reload();
-        console.log(status);
-        //$("myForm")[0].reset();
-  });
-      return false;
-    }
-  });
-});
-
-
-
-
-
-
-
+    console.log("voteId "+voteID);
+    var socket = io('/'+voteID);
+    data = data[voteID];
+    $('#total').html("/ "+data.connectCounter+" people connected");
+    $('#yeaG').html(data.yea);
+    $('#yeaP').html(Math.floor(data.yea/data.connectCounter*100)+" %");
+    $('#nayG').html(data.nay);
+    $('#nayP').html(Math.floor(data.nay/data.connectCounter)*100+" %");
 
 ////CANVAS////////
-var elem = document.getElementById('myCanvas'),
-    elemLeft = elem.offsetLeft,
-    elemTop = elem.offsetTop,
-    ctx = elem.getContext('2d'),
-    elements = [];
+            var elem = document.getElementById('myCanvas'),
+                elemLeft = elem.offsetLeft,
+                elemTop = elem.offsetTop,
+                ctx = elem.getContext('2d'),
+                elements = [];
 
-elem.addEventListener('click', function(event) {
-    var x = event.pageX - elemLeft,
-        y = event.pageY - elemTop;
-var dynHeight = $('#myCanvas').height()/2;
-    elements.forEach(function(element) {
-        if (voted === false) {
-            if(y<dynHeight){
-                console.log(y);
-                socket.emit("button yea","yea");
+            elem.addEventListener('click', function(event) {
+                var x = event.pageX - elemLeft,
+                    y = event.pageY - elemTop;
+            var dynHeight = $('#myCanvas').height()/2;
+                elements.forEach(function(element) {
+                    if (voted === false) {
+                        if(y<dynHeight){
 
-                voted = true;
-             } else {
-                console.log(y);
-                socket.emit("button nay","nay");
+                            socket.emit("vote","yea");
 
-                voted = true;
-            }
-        }
+                            voted = true;
+                         } else {
+
+                            socket.emit("vote","nay");
+
+                            voted = true;
+                        }
+                    }
+                });
+            }, false);
+            var dynHeight = $('#myCanvas').height();
+            // Add element.
+            elements.push({
+                color: '#DCC6E0',
+                width: 320,
+                height: 160,
+                top: 0,
+                left: 0,
+                name: "yea"
+            },{
+
+                color: 'purple',
+                width: 320,
+                height: 160,
+                top: 160,
+                left: 0,
+                name: "Nay"
+            });
+
+            // Render elements.
+            elements.forEach(function(element) {
+                ctx.fillStyle = element.color;
+                ctx.fillRect(element.left, element.top, element.width, element.height);
+
+            });
+/////////////////// END CANVAS/////////////
+
+socket.on('update'+voteID, data => {
+    console.log(data);
+    $('#total').html(data.connectCounter);
+     $('#yeaG').html(data.yea);
+     $('#yeaP').html(Math.floor(data.yea/data.connectCounter*100)+" %");
+     $('#nayG').html(data.nay);
+     $('#nayP').html(Math.floor(data.nay/data.connectCounter)*100+" %");
+});
+
+        });
+
     });
-}, false);
-var dynHeight = $('#myCanvas').height();
-// Add element.
-elements.push({
-    color: '#DCC6E0',
-    width: 320,
-    height: 160,
-    top: 0,
-    left: 0,
-    name: "yea"
-},{
-
-    color: 'purple',
-    width: 320,
-    height: 160,
-    top: 160,
-    left: 0,
-    name: "Nay"
-});
-
-// Render elements.
-elements.forEach(function(element) {
-    ctx.fillStyle = element.color;
-    ctx.fillRect(element.left, element.top, element.width, element.height);
-
-});
-////////
-
-
-
-
-/////SOCKET/////
-	socket.on('update-msg', function (msg) {
-		console.log(msg);
-	    $('#total').html(msg.connectCounter);
-         $('#yeaG').html(msg.yea);
-         $('#yeaP').html(Math.floor(msg.yea/msg.connectCounter*100)+" %");
-         $('#nayG').html(msg.nay);
-         $('#nayP').html(Math.floor(msg.nay/msg.connectCounter)*100+" %");
-	});
-
-});
-
-
-});
 
 </script>
 </body>
