@@ -6,12 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Show of Hands</title>
     <link rel="stylesheet" type="text/css" href="style.css">
-<!--     <script type="text/javascript" src="worker.js"></script> -->
-  <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
     <script
-  src="https://code.jquery.com/jquery-3.1.1.js"
-  integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
-  crossorigin="anonymous"></script>
+    src="https://code.jquery.com/jquery-3.1.1.js"
+    integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
+    crossorigin="anonymous"></script>
+    <script type="text/javascript" src="worker.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+
 </head>
 <body>
   <div class="container" >
@@ -55,47 +56,25 @@
     var voted = false;
     var voteID = 0;
 
+$.get("/allVotes", function( data ) {
+    console.log(data);
+});
 
 function submit(){
   var voteID = $('#votePick').val();
-  $.post("/votePick", { votePick : voteID },function(data){
-    console.log(typeof data);
-    $(location).attr('href', '/'+data);
-  });
+    $(location).attr('href', '/'+voteID);
+
 }
 
 
-  $.get( "/getSession",  function( data ) {
-    console.log(data);
-    for(i=0;i<data.length;i++){
-      $('body > div:nth-child(1) > select').append("<option value='"+i+"'>"+data[i]+"</option>");
+$('#nameVote').keydown(function(event) {
+    if (event.keyCode == 13) {
+      var  newVote = JSON.stringify($('#nameVote').val());
+      $.post( "/newVote", { voteName: newVote }, function( data ) {
+              $(location).attr('href', '/'+data);
+      });
     }
-  });
-
-
-    $('#nameVote').keydown(function(event) {
-        if (event.keyCode == 13) {
-          //console.log($('#nameVote').val());
-          var  newVote = JSON.stringify($('#nameVote').val());
-
-          $.post( "/newVote", { voteName: newVote }, function( data ) {
-
-              $.get( "/getSession",  function( data ) {
-                  console.log(data[data.length-1]);
-                  var newUrl = data.length-1;
-                  console.log(typeof newUrl);
-                 $(location).attr('href', '/');
-
-
-
-              });
-
-          });
-
-
-
-        }
-    });
+});
 
 
 
