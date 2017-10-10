@@ -6,12 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Show of Hands</title>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script
-    src="https://code.jquery.com/jquery-3.1.1.js"
-    integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
-    crossorigin="anonymous"></script>
-    <script type="text/javascript" src="worker.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
 
 </head>
 <body>
@@ -19,62 +13,16 @@
     <div class="">
       <input id="nameVote" type="text" class="commentarea" placeholder="Create a new vote by naming it or..." onsubmit="reset()" >
     </div>
-    <select id="votePick"  onChange="submit()" style=" margin-top:20px; height: 40px; width: 100%; font-size: 30px; background-color: rgba(0,0,0,.2);" >
+    <select id="votePick" onchange="submit()" style=" margin-top:20px; height: 40px; width: 100%; font-size: 30px; background-color: rgba(0,0,0,.2);" >
         <option value="nothing">select from votes in progress</option>
     </select>
-<hr>
+    <hr>
         <h1 id="title" style="font-weight: 900">STORED VOTES...</h1>
     <div id="experiment">
     </div>
   </div>
 
 
-
-  <div class='container' style="display:none;">
-    <span id="yeaG" style='color:#DCC6E0'></span>
-    <span style='color:#DCC6E0'>Yea</span>
-    <span id="yeaP" style='color:#DCC6E0'>%</span>
-    <span id="nayG" style='color:purple'></span>
-    <span  style='color:purple'>Nay</span>
-    <span id="nayP" style='color:purple'>%</span><br>
-    <span id="total" style='color:purple'></span><br>
-    <div id='plink'>
-      <canvas id="myCanvas" width=320px; height=320px;>
-      </canvas>
-    </div>
-    <span id="warning">TOO LONG OF A TITLE!!!!</span>
-    <div>
-      <input id="votename" type="text" class="commentarea" placeholder="name this vote and save >>"  >
-    </div>
-    <div id="display"></div>
-
-  </div>
-<script>
-/* jslint esversion:6 */
-
-
-    var voted = false;
-    var voteID = 0;
-
-$.get("/allVotes", function( data ) {
-    console.log(data);
-});
-
-function submit(){
-  var voteID = $('#votePick').val();
-    $(location).attr('href', '/'+voteID);
-
-}
-
-
-$('#nameVote').keydown(function(event) {
-    if (event.keyCode == 13) {
-      var  newVote = JSON.stringify($('#nameVote').val());
-      $.post( "/newVote", { voteName: newVote }, function( data ) {
-              $(location).attr('href', '/'+data);
-      });
-    }
-});
 
 
 
